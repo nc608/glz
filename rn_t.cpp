@@ -4,6 +4,7 @@ desc:
  *****************************************************************************/
 #include "rn_t.h"			//
 #include "common.h"			//
+#include "fs_t.h"			//filesystem
 #include <GL/glew.h>		//extension enumerator
 #include <GL/gl.h>			//gl types
 #include <iostream>			//cout
@@ -26,6 +27,11 @@ int rn_t::start( void )
 	int retv = ERR_OK;
 	GLenum gl_err = glewInit();
 
+	fs_t f;
+	string blank_string = "";
+	vector<string> files;
+	vector<string>::iterator i = files.begin();
+
 	/*start glew*/
 	if( gl_err != GLEW_OK )
 	{
@@ -46,6 +52,16 @@ int rn_t::start( void )
 
 	delete_all_shaders();
 	init_vtx_b();
+
+	cout << "testing filesystem" << endl << endl;
+	f.read_file_to_string( "shader/file_vtx_shader.c", &blank_string );
+	f.get_all_files_in_dir( "shader/", &files );
+
+	for( i = files.begin(); i != files.end(); i ++ )
+		cout << *i << ", ";
+
+	cout << endl;
+
 
 out:
 	return retv;
@@ -83,6 +99,18 @@ int rn_t::run( void )
 func:
 desc: 
  *****************************************************************************/
+int rn_t::shutdown( void )
+{
+	/*shut down*/
+	glDeleteProgram( r_sh_program );
+	return ERR_OK;
+}
+
+
+/******************************************************************************
+func:
+desc: 
+ *****************************************************************************/
 int rn_t::load_all_shaders( void )
 {
 	int retv = ERR_OK;
@@ -93,7 +121,7 @@ int rn_t::load_all_shaders( void )
 			"vec4 position;\n"
 			"void main()\n"
 			"{\n"
-			"   gl_Position = position;\n"
+			"   gl_Position = ftransform();\n"
 			"}\n" );
 
 	string str_frag_shader(
@@ -101,19 +129,20 @@ int rn_t::load_all_shaders( void )
 			"vec4 outputColor;\n"
 			"void main()\n"
 			"{\n"
-			"   outputColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);\n"
+			"   gl_FragColor = vec4( 0.0f, 0.05f, 0.1f, 1.0f );\n"
 			"}\n" );
 
-	r_shader_list.push_back(
-			compile_shader(
-				&sh_num,
-				GL_VERTEX_SHADER,
-				(char*)str_vtx_shader.c_str() ) );
-	r_shader_list.push_back(
-			compile_shader(
-				&sh_num,
-				GL_FRAGMENT_SHADER,
-				(char*)str_frag_shader.c_str() ) );
+	compile_shader(
+			&sh_num,
+			GL_VERTEX_SHADER,
+			(char*)str_vtx_shader.c_str() );
+	r_shader_list.push_back( sh_num );
+
+	compile_shader(
+			&sh_num,
+			GL_FRAGMENT_SHADER,
+			(char*)str_frag_shader.c_str() );
+	r_shader_list.push_back( sh_num );
 
 	return retv;
 }

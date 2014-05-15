@@ -11,3 +11,6 @@ desc: error codes
 #define ERR_GLEW 5
 #define ERR_SHADER_COMPILE 6
 #define ERR_SHADER_LINK 7
+#define ERR_OPENING_DIR 8
+#define ERR_STAT 9
+

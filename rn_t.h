@@ -8,7 +8,7 @@ desc:
 #include <GL/gl.h>			//gl types
 #include <vector>			//stl vector
 
-#define BG_COLOR 0.0f, 0.5f, 1.0f, 0.0f
+#define BG_COLOR 0.0f, 0.0f, 0.0f, 0.0f
 
 using std::vector;
 
@@ -21,7 +21,7 @@ class rn_t
 
 		int start( void );
 		int run( void );
-		int shutdown( void ) { return 0; };
+		int shutdown( void );
 
 	private:
 		/*functions*/

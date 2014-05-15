@@ -19,7 +19,8 @@ LIBS = X11 \
 C_SOURCES	=
 CPP_SOURCES	= start.cpp \
 			  xwin_t.cpp \
-			  rn_t.cpp
+			  rn_t.cpp \
+			  fs_t.cpp
 
 OBJS := $(patsubst %, $(OBJ_DIR)/%, $(C_SOURCES:%.c=%.o))
 OBJS += $(patsubst %, $(OBJ_DIR)/%, $(CPP_SOURCES:%.cpp=%.o))
